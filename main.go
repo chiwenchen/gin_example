@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"./common"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 )
 
 type User struct {
@@ -19,17 +19,12 @@ type User struct {
 }
 
 func main() {
-	db, err := gorm.Open("mysql", "root@unix(/tmp/mysql.sock)/snapask_development")
+	db, err := common.InitDB()
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 	defer db.Close()
-
-	db.AutoMigrate(&User{})
-
-	checkResult := db.HasTable(&User{})
-	fmt.Println(checkResult)
 
 	router := gin.Default()
 
